@@ -3,10 +3,7 @@ const eventId = trakContent.get("eventId");
 console.log(eventId);
 
 if (eventId) {
-  fetch(
-    "https://striveschool-api.herokuapp.com/api/put-your-endpoint-here/" +
-      eventId
-  )
+  fetch("https://striveschool-api.herokuapp.com/api/product/" + eventId)
     .then((res) => {
       if (res.ok) {
         return res.json();
@@ -17,13 +14,15 @@ if (eventId) {
     .then((eventDetails) => {
       const nameInput = document.getElementById("name");
       const descriptionInput = document.getElementById("description");
+      const brandInput = document.getElementById("brand");
+      const imageUrl = document.getElementById("imagUrl");
       const priceInput = document.getElementById("price");
-      const timeInput = document.getElementById("time");
 
       nameInput.value = eventDetails.name;
       descriptionInput.value = eventDetails.description;
+      brandInput.value = eventDetails.brand;
+      imageUrl.value = eventDetails.imageUrl;
       priceInput.value = eventDetails.price;
-      timeInput.value = eventDetails.time.split(".000Z")[0]; // rimuove '.000Z' dalla stringa
     })
     .catch((err) => {
       console.log("errore", err);
@@ -33,7 +32,7 @@ if (eventId) {
 const formReference = document.getElementById("form");
 formReference.addEventListener("submit", function (e) {
   e.preventDefault();
-  console.log("invio i dati all'API");
+  console.log("invio brano all'API");
 
   const nameInput = document.getElementById("name");
   const descriptionInput = document.getElementById("description");
@@ -41,7 +40,7 @@ formReference.addEventListener("submit", function (e) {
   const imageUrlInput = document.getElementById("imageUrl");
   const priceInput = document.getElementById("price");
 
-  const newEvent = {
+  const newTrak = {
     name: nameInput.value,
     description: descriptionInput.value,
     brand: brandInput.value,
@@ -49,28 +48,29 @@ formReference.addEventListener("submit", function (e) {
     price: priceInput.value,
   };
 
-  console.log("Ecco l'oggetto che manderò alle API", newEvent);
+  console.log("Oggetto caricato nell' API", newTrak);
 
   let methodToUse = "POST";
   if (eventId) {
     methodToUse = "PUT";
   }
 
-  fetch("https://striveschool-api.herokuapp.com/api/put-your-endpoint-here/", {
+  fetch("https://striveschool-api.herokuapp.com/api/product/", {
     method: "POST",
-    body: JSON.stringify(newEvent),
+    body: JSON.stringify(newTrak),
+
     headers: {
+      "Content-Type": "application/json",
       Authorization:
         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTI5MDQ0NjEzOWM0MzAwMTg4MTQ1YzkiLCJpYXQiOjE2OTcxODY4ODYsImV4cCI6MTY5ODM5NjQ4Nn0.g0twYASN7w9eICXO-U1aOBwrme316yIfsj-cYhzrzPU",
     },
   })
     .then((res) => {
-      console.log("OGGETTO RESPONSE DELLA NOSTRA CHIAMATA POST", res);
+      console.log("Oggetto Post", res);
       if (res.ok) {
-        alert("EVENTO SALVATO CORRETTAMENTE!");
+        alert("Brano salvato!");
       } else {
-        o;
-        alert("ERRORE NEL SALVATAGGIO DELL'EVENTO");
+        alert("Errore nel salvataggio del brano");
         throw new Error("Errore nella POST");
       }
     })

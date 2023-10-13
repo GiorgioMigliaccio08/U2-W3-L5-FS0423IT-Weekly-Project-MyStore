@@ -8,12 +8,12 @@ const visualizzaBrani = function (allTraks) {
 
     newColonna.innerHTML = `
       <div class="card">
-          <div class="card-body">
+          <div class="card-body ">
               <h5 class="card-name">${event.name}</h5>
               <p class="card-text">${event.description}</p>
               <p class="card-text">${event.brand}</p>
-              <img class="card-img">${event.imageUrl}</img>
-              < class="card-text"> ${event.price}€</p>
+              <img src="${event.imageUrl}" class="card-img" />
+              <p class="card-text"> ${event.price}€</p>
               <a href="./detail.html?eventId=${event._id}" class="btn btn-primary">SALVA BRANO</a>
           </div>
       </div>
@@ -23,15 +23,14 @@ const visualizzaBrani = function (allTraks) {
 };
 
 const getTraks = function () {
-  fetch("https://striveschool-api.herokuapp.com/api/put-your-endpoint-here/", {
+  fetch("https://striveschool-api.herokuapp.com/api/product/", {
     headers: {
+      "Content-Type": "application/json",
       Authorization:
         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTI5MDQ0NjEzOWM0MzAwMTg4MTQ1YzkiLCJpYXQiOjE2OTcxODY4ODYsImV4cCI6MTY5ODM5NjQ4Nn0.g0twYASN7w9eICXO-U1aOBwrme316yIfsj-cYhzrzPU",
     },
   })
     .then((res) => {
-      hideSpinner();
-
       console.log("Response ottenuta dalla GET", res);
       if (res.ok) {
         return res.json();
@@ -45,9 +44,8 @@ const getTraks = function () {
       visualizzaBrani(events);
     })
     .catch((err) => {
-      hideSpinner();
       console.log("Si è verificato un errore:", err);
     });
 };
 
-getEvents();
+getTraks();
